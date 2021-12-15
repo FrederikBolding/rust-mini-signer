@@ -1,4 +1,4 @@
-use primitive_types::{H256, U256};
+use primitive_types::U256;
 use rlp::RlpStream;
 use secp256k1::recovery::SecretKey;
 use secp256k1::{Message, Secp256k1};
@@ -7,8 +7,8 @@ use tiny_keccak::{Hasher, Keccak};
 
 pub struct Signature {
     pub v: u64,
-    pub r: H256,
-    pub s: H256,
+    pub r: U256,
+    pub s: U256,
 }
 
 pub struct Type2Transaction {
@@ -43,8 +43,8 @@ impl Signer {
 
 fn rlp_append_signature(stream: &mut RlpStream, sig: Signature) {
     stream.append(&sig.v);
-    stream.append(&U256::from_big_endian(sig.r.as_bytes()));
-    stream.append(&U256::from_big_endian(sig.s.as_bytes()));
+    stream.append(&sig.r);
+    stream.append(&sig.s);
 }
 
 fn serialize_type2_tx(tx: &Type2Transaction, sig: Option<Signature>) -> Vec<u8> {
@@ -79,8 +79,8 @@ fn sign(private_key: SecretKey, msg: &[u8]) -> Signature {
     let (recovery, sig) = signed.serialize_compact();
     return Signature {
         v: recovery.to_i32() as u64,
-        r: H256::from_slice(&sig[..32]),
-        s: H256::from_slice(&sig[32..]),
+        r: U256::from_big_endian(&sig[..32]),
+        s: U256::from_big_endian(&sig[32..]),
     };
 }
 
