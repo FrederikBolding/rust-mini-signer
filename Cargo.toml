@@ -6,3 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+rlp = "0.5.1"
+secp256k1 = { version = "0.20.3", features = ["recovery"] }
+primitive-types = { version = "0.10.1", features = ["impl-rlp"] }
+tiny-keccak = { version = "2.0.2", features = ["keccak"] }
+hex = "0.4.3"
